@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # 1. RDS PostgreSQL Mirror
+  postgres:
+    image: postgres:16-alpine
+    container_name: hyperion-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: hyperion
+      POSTGRES_USER: hyperion
+      POSTGRES_PASSWORD: hyperion
+
+  # 2. ElastiCache Redis Mirror
+  redis:
+    image: redis:7-alpine
+    container_name: hyperion-redis
+    ports:
+      - "6379:6379"
+
+  # 3. Zookeeper (Required for Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: hyperion-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # 4. AWS MSK (Kafka) Mirror
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: hyperion-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      # 9092 for your local machine, 29092 for other Docker containers to talk to Kafka
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
