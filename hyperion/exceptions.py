@@ -30,10 +30,10 @@ def __getattr__(name: str) -> type[HyperionError]:
     return _get_or_create_exception(name)
 
 
+__all__ = ["HyperionError"]
+
+
 def __dir__() -> list[str]:
     public_names = set(__all__)
     public_names.update(_DYNAMIC_EXCEPTIONS.keys())
     return sorted(public_names)
-
-
-__all__ = ["HyperionError"]
