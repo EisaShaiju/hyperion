@@ -13,3 +13,6 @@ venv/
 # IDEs
 .vscode/
 .idea/  
+
+# MD DESCRIPTION
+Hyperion_build_Context.MD
