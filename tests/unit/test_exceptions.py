@@ -13,3 +13,4 @@ def test_from_import_creates_exception() -> None:
     from hyperion.exceptions import SimulationFailure
 
     assert issubclass(SimulationFailure, exceptions.HyperionError)
+    assert SimulationFailure is exceptions.SimulationFailure

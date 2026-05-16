@@ -15,7 +15,11 @@ def _get_or_create_exception(name: str) -> type[HyperionError]:
     if existing is not None:
         return existing
 
-    new_exception = type(name, (HyperionError,), {})
+    new_exception = type(
+        name,
+        (HyperionError,),
+        {"__doc__": f"Dynamically created {name} exception."},
+    )
     _DYNAMIC_EXCEPTIONS[name] = new_exception
     globals()[name] = new_exception
     return new_exception
