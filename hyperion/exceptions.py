@@ -31,4 +31,8 @@ def __getattr__(name: str) -> type[HyperionError]:
     return _get_or_create_exception(name)
 
 
+def __dir__() -> list[str]:
+    return sorted({*globals().keys(), *_DYNAMIC_EXCEPTIONS.keys()})
+
+
 __all__ = ["HyperionError"]
