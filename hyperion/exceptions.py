@@ -2,17 +2,15 @@
 
 from __future__ import annotations
 
-from typing import Dict, Type
-
 
 class HyperionError(Exception):
     """Base class for Hyperion errors."""
 
 
-_DYNAMIC_EXCEPTIONS: Dict[str, Type[HyperionError]] = {}
+_DYNAMIC_EXCEPTIONS: dict[str, type[HyperionError]] = {}
 
 
-def _get_or_create_exception(name: str) -> Type[HyperionError]:
+def _get_or_create_exception(name: str) -> type[HyperionError]:
     existing = _DYNAMIC_EXCEPTIONS.get(name)
     if existing is not None:
         return existing
@@ -23,7 +21,7 @@ def _get_or_create_exception(name: str) -> Type[HyperionError]:
     return new_exception
 
 
-def __getattr__(name: str) -> Type[HyperionError]:
+def __getattr__(name: str) -> type[HyperionError]:
     if name.startswith("_"):
         raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
     return _get_or_create_exception(name)
