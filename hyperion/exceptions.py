@@ -21,7 +21,6 @@ def _get_or_create_exception(name: str) -> type[HyperionError]:
         {"__doc__": f"Dynamically created {name} exception."},
     )
     _DYNAMIC_EXCEPTIONS[name] = new_exception
-    globals()[name] = new_exception
     return new_exception
 
 
@@ -32,7 +31,9 @@ def __getattr__(name: str) -> type[HyperionError]:
 
 
 def __dir__() -> list[str]:
-    return sorted({*globals().keys(), *_DYNAMIC_EXCEPTIONS.keys()})
+    public_names = {name for name in globals().keys() if not name.startswith("_")}
+    public_names.update(_DYNAMIC_EXCEPTIONS.keys())
+    return sorted(public_names)
 
 
 __all__ = ["HyperionError"]
