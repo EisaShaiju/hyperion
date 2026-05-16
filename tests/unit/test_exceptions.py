@@ -1,3 +1,5 @@
+import pytest
+
 from hyperion import exceptions
 
 
@@ -7,6 +9,8 @@ def test_dynamic_exception_is_subclass_and_cached() -> None:
 
     assert issubclass(first, exceptions.HyperionError)
     assert first is second
+    with pytest.raises(first):
+        raise first("boom")
 
 
 def test_from_import_creates_exception() -> None:

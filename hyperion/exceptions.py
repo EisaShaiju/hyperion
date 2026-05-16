@@ -31,7 +31,7 @@ def __getattr__(name: str) -> type[HyperionError]:
 
 
 def __dir__() -> list[str]:
-    public_names = {name for name in globals().keys() if not name.startswith("_")}
+    public_names = {name for name in globals() if not name.startswith("_")}
     public_names.update(_DYNAMIC_EXCEPTIONS.keys())
     return sorted(public_names)
 
